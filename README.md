@@ -1,6 +1,6 @@
 # Blog
 
-A Laravel 13 learning project for MM24. The home page recreates Bootstrap's primary button using only Tailwind CSS utilities, including hover, active, keyboard focus and disabled states.
+A Laravel 13 learning project for MM24. The home page follows the teacher's MM24 blog: a Dracula theme, shared navigation, post cards and pagination. The original Tailwind-only Bootstrap primary button exercise is preserved at `/buttons`.
 
 ## Requirements
 
@@ -161,10 +161,10 @@ Create the database file without overwriting an existing database:
 
 ```sh
 php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
-php artisan migrate
+php artisan migrate --seed
 ```
 
-If Laravel asks whether to create the SQLite database, answer `yes`. The migrations create the required tables. The `database` directory and database file must be writable. No MySQL username or password is needed.
+If Laravel asks whether to create the SQLite database, answer `yes`. The migrations create the required tables. The post seeder adds 1,000 sample posts only when the posts table is empty; running it again keeps existing posts unchanged. The `database` directory and database file must be writable. No MySQL username or password is needed.
 
 ## 10. Start the application
 
@@ -188,9 +188,11 @@ bun run dev
 
 ## 11. Check the result
 
-The home page should show **Primary** and **Disabled primary** buttons. Hover over Primary, hold the mouse button down, and use Tab to check keyboard focus. The disabled example must not activate.
+The home page should show post cards with **Read more** links and pagination. **Admin → Posts** opens the teacher's post table at `/admin/posts`. Its create, edit and delete actions remain unfinished examples, as in the teacher's repository.
 
-Compare it with [Bootstrap 5.3 buttons](https://getbootstrap.com/docs/5.3/components/buttons/). The demo in `resources/views/welcome.blade.php` uses Tailwind utility classes, no Bootstrap CSS and no custom button CSS. The project already includes daisyUI, but this exercise does not use its button classes.
+Open **Buttons** in the navigation, or visit [http://localhost:8000/buttons](http://localhost:8000/buttons). This page contains our **Primary** and **Disabled primary** buttons alongside the teacher's button examples. Hover over Primary, hold the mouse button down, and use Tab to check keyboard focus. The disabled example must not activate.
+
+Compare it with [Bootstrap 5.3 buttons](https://getbootstrap.com/docs/5.3/components/buttons/). The demo in `resources/views/buttons.blade.php` uses Tailwind utility classes, no Bootstrap CSS and no custom button CSS. The project already includes daisyUI, but our primary-button exercise does not use its button classes. The surrounding blog and the teacher's other examples use daisyUI.
 
 You can also verify that frontend assets compile:
 
@@ -212,4 +214,10 @@ bun run build
 | Port 8000 is already in use | Stop the other server, or run `php artisan serve --port=8001` and open `http://localhost:8001`. |
 | Environment changes do not take effect | Run `php artisan config:clear` and restart the development processes. |
 
-After pulling future changes, run `composer install`, `bun install` and `php artisan migrate` before starting the app again.
+After pulling future changes, run `composer install`, `bun install` and `php artisan migrate --seed` before starting the app again.
+
+## Teacher reference
+
+The layout and post examples were adapted from [Kasparsu/mm24blog](https://github.com/Kasparsu/mm24blog/tree/c42e33a) (commit `c42e33a`, checked on 13 October 2026). The shared layout, Dracula theme, desktop four-column post grid, navigation and admin post table follow that version. Sample post text is generated locally, so it will differ from the teacher's database.
+
+Our complete installation guide and Tailwind-only button exercise are retained. The `learnphp` user CRUD belongs to the separate [learnphp repository](https://github.com/FrederikRuutel/learnphp).
