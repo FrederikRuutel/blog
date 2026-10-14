@@ -188,7 +188,7 @@ bun run dev
 
 ## 11. Check the result
 
-The home page should show post cards with **Read more** links and pagination. **Admin → Posts** opens the teacher's post table at `/admin/posts`. Its create, edit and delete actions remain unfinished examples, as in the teacher's repository.
+The home page should show post cards with **Read more** links and pagination. **Admin → Posts** opens the teacher's post table at `/admin/posts`. Use **New Post**, **View**, **Edit** and **Delete** to manage posts. The title is required and the body is optional. Delete removes a post immediately. As in the teacher's course example, these admin routes do not yet require login.
 
 Open **Buttons** in the navigation, or visit [http://localhost:8000/buttons](http://localhost:8000/buttons). This page contains our **Primary** and **Disabled primary** buttons alongside the teacher's button examples. Hover over Primary, hold the mouse button down, and use Tab to check keyboard focus. The disabled example must not activate.
 
@@ -218,6 +218,6 @@ After pulling future changes, run `composer install`, `bun install` and `php art
 
 ## Teacher reference
 
-The layout and post examples were adapted from [Kasparsu/mm24blog](https://github.com/Kasparsu/mm24blog/tree/c42e33a) (commit `c42e33a`, checked on 13 October 2026). The shared layout, Dracula theme, desktop four-column post grid, navigation and admin post table follow that version. Sample post text is generated locally, so it will differ from the teacher's database.
+The layout and post examples were adapted from [Kasparsu/mm24blog](https://github.com/Kasparsu/mm24blog/tree/a2f01b7) (commit `a2f01b7`, checked on 14 October 2026). The shared layout, Dracula theme, desktop four-column post grid, navigation and post CRUD follow that version. The edit form uses the post body in its content field, correcting a typo in the reference. Sample post text is generated locally, so it will differ from the teacher's database.
 
 Our complete installation guide and Tailwind-only button exercise are retained. The `learnphp` user CRUD belongs to the separate [learnphp repository](https://github.com/FrederikRuutel/learnphp).
