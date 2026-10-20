@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,9 +14,19 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        // Keep existing posts when setup is run more than once.
-        if (Post::query()->doesntExist()) {
-            Post::factory(1000)->create();
+        if (Post::query()->exists()) {
+            return;
+        }
+
+        if (User::query()->doesntExist()) {
+            $this->call(UserSeeder::class);
+        }
+
+        $users = User::select('id')->get();
+        $posts = Post::factory(1000)->make();
+        foreach($posts as $post) {
+            $post->user_id = $users->random()->id;
+            $post->save();
         }
     }
 }

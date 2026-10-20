@@ -221,3 +221,37 @@ After pulling future changes, run `composer install`, `bun install` and `php art
 The layout and post examples were adapted from [Kasparsu/mm24blog](https://github.com/Kasparsu/mm24blog/tree/a2f01b7) (commit `a2f01b7`, checked on 14 October 2026). The shared layout, Dracula theme, desktop four-column post grid, navigation and post CRUD follow that version. The edit form uses the post body in its content field, correcting a typo in the reference. Sample post text is generated locally, so it will differ from the teacher's database.
 
 Our complete installation guide and Tailwind-only button exercise are retained. The `learnphp` user CRUD belongs to the separate [learnphp repository](https://github.com/FrederikRuutel/learnphp).
+
+
+## Authentication and post authors (October 2026)
+
+The project includes registration, login, password reset, email verification,
+and profile editing. Login and registration redirect to the home page.
+With `MAIL_MAILER=log`, email verification and password reset messages are
+written to `storage/logs/laravel.log`; use the link from that file locally.
+
+When updating an existing checkout, preserve your `.env` and database, then run:
+
+```bash
+composer install
+bun install
+php artisan migrate
+php artisan optimize:clear
+bun run build
+php artisan test
+composer run dev
+```
+
+The new migration adds a nullable author to existing posts without deleting
+content. Existing posts display "Unknown author" until an author is assigned.
+Deleting a user preserves their posts and clears the author reference.
+Posts created while signed in use the current user as their author.
+
+For sample data in local development, run `php artisan db:seed`. Repeating it
+preserves existing posts. The default demo account is `user@user.user` with
+password `password`. Optional `DEFAULT_USER_NAME`, `DEFAULT_USER_EMAIL` and
+`DEFAULT_USER_PASSWORD_HASH` settings customize this account; an empty hash
+uses the demo password. Do not seed this demo account on a public deployment.
+
+The admin post routes remain accessible as in the classroom example; adding
+admin authorization is a separate task.
