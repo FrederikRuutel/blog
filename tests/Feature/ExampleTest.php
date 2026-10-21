@@ -1,13 +1,15 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
 use Database\Seeders\PostSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 test('home displays post cards and a second page', function () {
-    $posts = Post::factory()->count(17)->create();
+    Post::factory()->count(17)->create();
+    $posts = Post::latest()->orderByDesc('id')->get();
     $this->get(route('home'))->assertOk()
         ->assertSee($posts[0]->title)
         ->assertSee(route('post', $posts[0]), false)
@@ -25,7 +27,9 @@ test('post detail preserves line breaks and escapes HTML', function () {
 });
 
 test('admin lists posts and buttons retain the utility-only exercise', function () {
-    $post = Post::factory()->create();
+    $user = User::factory()->create();
+    $this->actingAs($user);
+    $post = Post::factory()->create(['user_id' => $user->id]);
     $this->get(route('posts.index'))->assertOk()->assertSee($post->title);
     $this->get(route('buttons'))->assertOk()
         ->assertSee('Disabled primary')

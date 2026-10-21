@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Image;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -13,7 +16,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(16);
+        /** @var App\Models\User $user */
+        $user = Auth::user();
+        $posts = $user->posts()->latest()->paginate(16);
         return view('posts.index', compact('posts'));
     }
 
@@ -30,12 +35,20 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-
-        $post = new Post($request->validated());
+        $post = new Post($request->safe()->only(['title', 'body']));
         // $post->title = $request->input('title');
         // $post->body = $request->input('body');
-        $post->user_id = $request->user()?->id;
+        $post->user()->associate(Auth::user());
         $post->save();
+        foreach($request->file('images', []) as $file) {
+            $image = $file->store('', ['disk' => 'public']);
+            $url = Storage::disk('public')->url($image);
+
+            $image = new Image();
+            $image->path = $url;
+            $image->post()->associate($post);
+            $image->save();
+        }
         return redirect()->route('posts.index');
     }
 
@@ -44,6 +57,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        abort_unless($post->user_id === Auth::id(), 403);
         return view('posts.show', compact('post'));
     }
 
@@ -52,6 +66,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        abort_unless($post->user_id === Auth::id(), 403);
         return view('posts.edit', compact('post'));
     }
 
@@ -60,10 +75,11 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+        abort_unless($post->user_id === Auth::id(), 403);
         // $post->title = $request->validated('title');
         // $post->body = $request->validated('body');
-        //$post->fill($request->validated());
-        $post->update($request->validated());
+        //$post->fill($request->safe()->only(['title', 'body']));
+        $post->update($request->safe()->only(['title', 'body']));
         return redirect()->route('posts.index');
     }
 
@@ -72,6 +88,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        abort_unless($post->user_id === Auth::id(), 403);
         $post->delete();
         return redirect()->route('posts.index');
     }

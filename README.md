@@ -253,5 +253,22 @@ password `password`. Optional `DEFAULT_USER_NAME`, `DEFAULT_USER_EMAIL` and
 `DEFAULT_USER_PASSWORD_HASH` settings customize this account; an empty hash
 uses the demo password. Do not seed this demo account on a public deployment.
 
-The admin post routes remain accessible as in the classroom example; adding
-admin authorization is a separate task.
+Admin post routes require login. The list contains only your posts, and viewing,
+editing or deleting another user's post returns HTTP 403.
+
+
+## Post images
+
+Posts support multiple images when creating a post. Uploaded files are validated
+as images and stored on the public disk. Run these commands after pulling updates:
+
+```bash
+php artisan migrate
+php artisan storage:link
+php artisan optimize:clear
+bun run build
+```
+
+The shared post card displays a single image or a daisyUI carousel for multiple
+images. Posts without images remain supported. The home page shows newest posts
+first. Local sample images are provided by Picsum through `ImageSeeder`.

@@ -1,9 +1,14 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 test('posts can be created viewed edited and deleted', function () {
     $this->get(route('posts.create'))->assertOk();
@@ -23,7 +28,7 @@ test('title is required and invalid updates keep the original post', function ()
     $this->post(route('posts.store'), ['title' => '', 'body' => 'Content'])
         ->assertSessionHasErrors('title');
     $this->assertDatabaseCount('posts', 0);
-    $post = Post::factory()->create(['title' => 'Keep me', 'body' => 'Original body']);
+    $post = Post::factory()->create(['title' => 'Keep me', 'body' => 'Original body', 'user_id' => auth()->id()]);
     $this->from(route('posts.edit', $post))
         ->put(route('posts.update', $post), ['title' => '', 'body' => 'Changed body'])
         ->assertRedirect(route('posts.edit', $post))->assertSessionHasErrors('title');
