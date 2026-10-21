@@ -1,25 +1,26 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@extends('partials.layout')
+@section('content')
+<div class="container mx-auto px-4 py-6">
+<div class="card bg-base-300 shadow-sm w-full max-w-xl mx-auto">
+<div class="card-body">
+<h1 class="card-title">@lang('Forgot Password')</h1>
+<p>@lang('Enter your email address and we will send you a password reset link.')</p>
+@if (session('status'))
+    <div role="status" class="alert alert-success">{{ session('status') }}</div>
+@endif
+<form method="POST" action="{{ route('password.email') }}" class="space-y-4">
+@csrf
+<fieldset class="fieldset">
+    <legend class="fieldset-legend"><label for="email">@lang('Email')</label></legend>
+    <input id="email" name="email" type="email" class="input w-full @error('email') input-error @enderror" value="{{ old('email') }}" required autocomplete="username" />
+    @error('email')
+        <p role="alert" class="label text-error">{{ $message }}</p>
+    @enderror
+</fieldset>
+<button type="submit" class="btn btn-primary">@lang('Email Password Reset Link')</button>
+</form>
+<a href="{{ route('login') }}" class="btn btn-link">@lang('Back to login')</a>
+</div>
+</div>
+</div>
+@endsection

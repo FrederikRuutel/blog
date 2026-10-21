@@ -2,7 +2,9 @@
 @section('content')
     <div class="container mx-auto">
         <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+        @if (session('status'))
+    <div role="status" class="alert alert-success">{{ session('status') }}</div>
+@endif
 
         <form method="POST" action="{{ route('login') }}" class="card bg-base-300 shadow-sm w-2/3 mx-auto p-3">
             @csrf
@@ -29,7 +31,7 @@
 
             <!-- Remember Me -->
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Login options</legend>
+                <legend class="fieldset-legend">@lang('Login options')</legend>
                 <label class="label">
                     <input name="remember" type="checkbox" checked="checked" class="checkbox" />
                     @lang('Remember me')
