@@ -26,6 +26,8 @@ class StorePostRequest extends FormRequest
         return [
             'title' => 'required',
             'body' => 'nullable',
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['integer', 'distinct', 'exists:tags,id'],
             'images' => 'nullable|array',
             'images.*' => 'image',
         ];

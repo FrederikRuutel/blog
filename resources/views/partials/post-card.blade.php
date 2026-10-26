@@ -19,8 +19,20 @@
          @else
              <p>{!! $post->displayBody !!}</p>
          @endisset
-         <span class="text-base-content/70">{{ $post->user?->name ?? __('Unknown author') }}</span>
+         <span class="text-base-content/70">
+             @if ($post->user)
+                 <a href="{{ route('user', $post->user) }}" class="btn btn-link">{{ $post->user->name }}</a>
+             @else
+                 @lang('Unknown author')
+             @endif
+         </span>
          <span class="text-base-content/70">{{ $post->created_at?->diffForHumans() }}</span>
+         <span class="text-base-content/70"><b>@lang('Comments:')</b> {{ $post->comments_count }}</span>
+         <div class="flex flex-wrap gap-2">
+             @foreach ($post->tags as $tag)
+                 <div class="badge badge-outline badge-primary">{{ $tag->name }}</div>
+             @endforeach
+         </div>
          <div class="card-actions justify-end">
              @isset($posts)
                  <a href="{{ route('post', $post) }}" class="btn btn-primary">@lang('Read more')</a>
