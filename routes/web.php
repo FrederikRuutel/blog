@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
@@ -20,6 +21,7 @@ Route::get('/secure', [PublicController::class, 'index'])->name('secure')->middl
 // Route::delete('/admin/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 Route::resource('/admin/posts', PostController::class)->middleware('auth');
+Route::resource('/admin/tags', TagController::class)->middleware('auth');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
