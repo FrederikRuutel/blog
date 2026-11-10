@@ -18,7 +18,7 @@
                         </ul>
                     </li>
                 @endauth
-                <li><a>Item 3</a></li>
+                @include('partials.category-menu')
             </ul>
         </div>
         <a class="btn btn-ghost text-xl" href="{{ route('home') }}">{{ config('app.name') }}</a>
@@ -37,7 +37,7 @@
                     </details>
                 </li>
             @endauth
-            <li><a>Item 3</a></li>
+            @include('partials.category-menu')
         </ul>
     </div>
     <div class="navbar-end gap-2">

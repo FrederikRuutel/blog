@@ -272,3 +272,14 @@ bun run build
 The shared post card displays a single image or a daisyUI carousel for multiple
 images. Posts without images remain supported. The home page shows newest posts
 first. Local sample images are provided by Picsum through `ImageSeeder`.
+
+## Author URLs and categories
+
+After pulling the November classroom update, run `composer install` and
+`php artisan migrate`. Existing accounts receive unique author slugs, and
+existing posts keep their content and start without a category.
+
+For local sample categories, run `php artisan db:seed --class=CategorySeeder`.
+The navigation shows parent categories and their children, and post cards show
+the assigned category or **Uncategorized**. The full local demo seed assigns
+categories when generating new sample posts.

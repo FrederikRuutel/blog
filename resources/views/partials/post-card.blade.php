@@ -28,6 +28,7 @@
          </span>
          <span class="text-base-content/70">{{ $post->created_at?->diffForHumans() }}</span>
          <span class="text-base-content/70"><b>@lang('Comments:')</b> {{ $post->comments_count }}</span>
+         <div class="badge badge-secondary">{{ $post->category?->name ?? __('Uncategorized') }}</div>
          <div class="flex flex-wrap gap-2">
              @foreach ($post->tags as $tag)
                  <div class="badge badge-outline badge-primary">{{ $tag->name }}</div>
