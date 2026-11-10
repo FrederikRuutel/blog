@@ -29,3 +29,13 @@ test('demo user seeding is repeatable and handles an empty password setting', fu
     $user = User::where('email', env('DEFAULT_USER_EMAIL', 'user@user.user'))->firstOrFail();
     expect(Hash::check('password', $user->password))->toBeTrue();
 });
+
+test('author pages use unique name based URLs', function () {
+    $first = User::factory()->create(['name' => 'Same Author']);
+    $second = User::factory()->create(['name' => 'Same Author']);
+    $post = Post::factory()->for($second)->create();
+
+    expect($first->slug)->toBe('same-author')
+        ->and($second->slug)->not->toBe($first->slug);
+    $this->get('/user/'.$second->slug)->assertOk()->assertSee($post->title);
+});
