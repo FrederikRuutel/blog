@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
 {
@@ -52,5 +53,26 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function likedUsers()
+    {
+        return $this->likes()->with('user');
+    }
+
+    public function authHasLiked(): Attribute
+    {
+        return Attribute::get(function () {
+            if (! Auth::check()) {
+                return false;
+            }
+
+            return $this->likes()->where('user_id', Auth::user()->id)->exists();
+        });
     }
 }

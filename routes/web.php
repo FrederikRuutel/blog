@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\TagController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
@@ -37,3 +37,7 @@ require __DIR__.'/auth.php';
 Route::post('/post/{post}/comments', [CommentController::class, 'store'])->middleware('auth')->name('comments.store');
 
 Route::get('/user/{user}', [PublicController::class, 'user'])->name('user');
+
+Route::post('/user/{user}', [PublicController::class, 'follow'])->name('follow')->middleware('auth');
+Route::post('/post/{post}', [PublicController::class, 'like'])->name('like')->middleware('auth');
+Route::get('/feed', [PublicController::class, 'feed'])->name('feed')->middleware('auth');

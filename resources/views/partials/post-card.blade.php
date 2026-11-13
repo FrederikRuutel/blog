@@ -28,6 +28,17 @@
          </span>
          <span class="text-base-content/70">{{ $post->created_at?->diffForHumans() }}</span>
          <span class="text-base-content/70"><b>@lang('Comments:')</b> {{ $post->comments_count }}</span>
+         <div class="text-base-content/70">
+             <b>@lang('Likes:')</b>
+             <div class="tooltip">
+                 <div class="tooltip-content">
+                     @foreach ($post->likedUsers as $liker)
+                         <div>{{ $liker->user?->name ?? __('Unknown user') }}</div>
+                     @endforeach
+                 </div>
+                 <span>{{ $post->likes_count ?? $post->likes()->count() }}</span>
+             </div>
+         </div>
          <div class="badge badge-secondary">{{ $post->category?->name ?? __('Uncategorized') }}</div>
          <div class="flex flex-wrap gap-2">
              @foreach ($post->tags as $tag)
@@ -35,6 +46,16 @@
              @endforeach
          </div>
          <div class="card-actions justify-end">
+             @auth
+                 <form action="{{ route('like', $post) }}" method="POST">
+                     @csrf
+                     @if ($post->authHasLiked)
+                         <button class="btn btn-error">@lang('Unlike')</button>
+                     @else
+                         <button class="btn btn-primary">@lang('Like')</button>
+                     @endif
+                 </form>
+             @endauth
              @isset($posts)
                  <a href="{{ route('post', $post) }}" class="btn btn-primary">@lang('Read more')</a>
              @endisset
